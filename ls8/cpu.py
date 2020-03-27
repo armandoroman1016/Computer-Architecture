@@ -16,6 +16,7 @@ ADD = 0b10100000
 CMP = 0b10100111
 JMP = 0b01010100
 JEQ = 0b01010101
+JNE = 0b01010110
 
 class CPU:
     """Main CPU class."""
@@ -220,12 +221,23 @@ class CPU:
 
                     reg_idx = self.ram[self.pc + 1]
                     address = self.reg[reg_idx]
-
-                    print(address)
                     self.pc = address
                 
                 else:
                     self.pc += 2
+
+            elif command == JNE:
+                flag = self.reg[self.SP]
+
+                self.SP += 1
+
+                if flag > 1:
+                    reg_idx = self.ram[self.pc + 1]
+                    self.pc = self.reg[reg_idx]
+
+                else:
+                    self.pc += 2
+                
 
             elif command == HLT: # HLT
                 self.pc += 1
